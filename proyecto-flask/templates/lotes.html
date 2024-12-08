@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Lotes</h2>
+{% if mensaje %}
+<div class="alert alert-success">{{ mensaje }}</div>
+{% endif %}
+<button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addLoteModal">Agregar Lote</button>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Producto</th>
+            <th>Cantidad</th>
+            <th>Fecha de Producción</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for lote in lotes %}
+        <tr>
+            <td>{{ lote[0] }}</td>
+            <td>{{ lote[1] }}</td>
+            <td>{{ lote[2] }}</td>
+            <td>{{ lote[3] }}</td>
+            <td>
+                <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editLoteModal{{ lote[0] }}">Editar</button>
+                <a href="/lotes/delete/{{ lote[0] }}" class="btn btn-danger btn-sm">Eliminar</a>
+            </td>
+        </tr>
+
+        <div class="modal fade" id="editLoteModal{{ lote[0] }}" tabindex="-1" aria-labelledby="editLoteLabel{{ lote[0] }}" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form method="POST" action="/lotes/edit/{{ lote[0] }}">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="editLoteLabel{{ lote[0] }}">Editar Lote</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label for="producto_id" class="form-label">Producto</label>
+                                <select class="form-select" id="producto_id" name="producto_id" required>
+                                    {% for producto in productos %}
+                                    <option value="{{ producto[0] }}" {% if producto[0] == lote[4] %}selected{% endif %}>{{ producto[1] }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="cantidad" class="form-label">Cantidad</label>
+                                <input type="number" class="form-control" id="cantidad" name="cantidad" value="{{ lote[2] }}" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="fecha_produccion" class="form-label">Fecha de Producción</label>
+                                <input type="date" class="form-control" id="fecha_produccion" name="fecha_produccion" value="{{ lote[3] }}" required>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="submit" class="btn btn-primary">Guardar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </tbody>
+</table>
+
+<div class="modal fade" id="addLoteModal" tabindex="-1" aria-labelledby="addLoteLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form method="POST" action="/lotes/add">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addLoteLabel">Agregar Lote</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="producto_id" class="form-label">Producto</label>
+                        <select class="form-select" id="producto_id" name="producto_id" required>
+                            {% for producto in productos %}
+                            <option value="{{ producto[0] }}">{{ producto[1] }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="cantidad" class="form-label">Cantidad</label>
+                        <input type="number" class="form-control" id="cantidad" name="cantidad" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="fecha_produccion" class="form-label">Fecha de Producción</label>
+                        <input type="date" class="form-control" id="fecha_produccion" name="fecha_produccion" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Unidades de Medida</h2>
+{% if mensaje %}
+<div class="alert alert-success">{{ mensaje }}</div>
+{% endif %}
+<button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addUnidadModal">Agregar Unidad</button>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for unidad in unidades %}
+        <tr>
+            <td>{{ unidad[0] }}</td>
+            <td>{{ unidad[1] }}</td>
+            <td>
+                <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editUnidadModal{{ unidad[0] }}">Editar</button>
+                <a href="/unidades/delete/{{ unidad[0] }}" class="btn btn-danger btn-sm">Eliminar</a>
+            </td>
+        </tr>
+
+        <div class="modal fade" id="editUnidadModal{{ unidad[0] }}" tabindex="-1" aria-labelledby="editUnidadLabel{{ unidad[0] }}" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form method="POST" action="/unidades/edit/{{ unidad[0] }}">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="editUnidadLabel{{ unidad[0] }}">Editar Unidad</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label for="nombre" class="form-label">Nombre</label>
+                                <input type="text" class="form-control" id="nombre" name="nombre" value="{{ unidad[1] }}" required>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="submit" class="btn btn-primary">Guardar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </tbody>
+</table>
+
+<div class="modal fade" id="addUnidadModal" tabindex="-1" aria-labelledby="addUnidadLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form method="POST" action="/unidades/add">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addUnidadLabel">Agregar Unidad</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="nombre" class="form-label">Nombre</label>
+                        <input type="text" class="form-control" id="nombre" name="nombre" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

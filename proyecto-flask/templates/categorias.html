@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Categorías</h2>
+{% if mensaje %}
+<div class="alert alert-success">{{ mensaje }}</div>
+{% endif %}
+<button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addCategoriaModal">Agregar Categoría</button>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for categoria in categorias %}
+        <tr>
+            <td>{{ categoria[0] }}</td>
+            <td>{{ categoria[1] }}</td>
+            <td>
+                <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editCategoriaModal{{ categoria[0] }}">Editar</button>
+                <a href="/categorias/delete/{{ categoria[0] }}" class="btn btn-danger btn-sm">Eliminar</a>
+            </td>
+        </tr>
+
+        <!-- Modal para editar categoría -->
+        <div class="modal fade" id="editCategoriaModal{{ categoria[0] }}" tabindex="-1" aria-labelledby="editCategoriaLabel{{ categoria[0] }}" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form method="POST" action="/categorias/edit/{{ categoria[0] }}">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="editCategoriaLabel{{ categoria[0] }}">Editar Categoría</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label for="nombre" class="form-label">Nombre</label>
+                                <input type="text" class="form-control" id="nombre" name="nombre" value="{{ categoria[1] }}" required>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="submit" class="btn btn-primary">Guardar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </tbody>
+</table>
+
+<!-- Modal para agregar categoría -->
+<div class="modal fade" id="addCategoriaModal" tabindex="-1" aria-labelledby="addCategoriaLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form method="POST" action="/categorias/add">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addCategoriaLabel">Agregar Categoría</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="nombre" class="form-label">Nombre</label>
+                        <input type="text" class="form-control" id="nombre" name="nombre" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
