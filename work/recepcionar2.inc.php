@@ -1,0 +1,1 @@
+recepcion 2 del programa
